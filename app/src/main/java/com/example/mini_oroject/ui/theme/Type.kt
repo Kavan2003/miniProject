@@ -62,9 +62,9 @@ val Typography = Typography(
     titleMedium = TextStyle(
         fontFamily = FontFamily(Font(R.font.gillsansnovacondxbd)),
         fontWeight = FontWeight.Medium,
-        fontSize = 16.sp,
-        lineHeight = 24.sp,
-        letterSpacing = 0.15.sp
+        fontSize = 18.sp,
+        lineHeight = 30.sp,
+        letterSpacing = 01.0.sp
     ),
     titleSmall = TextStyle(
         fontFamily = FontFamily(Font(R.font.gillsansnovacondxbd)),

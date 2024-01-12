@@ -47,8 +47,9 @@ fun LoginChoose(navController: NavHostController){
 Spacer(modifier = Modifier.fillMaxHeight(fraction = 0.1f))
         Row (horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically, modifier = Modifier) {
             Image(painter =  painterResource(id = R.mipmap.bidbuddy_foreground), contentDescription ="",  contentScale = ContentScale.FillWidth,
-                modifier = Modifier.fillMaxWidth(fraction = 0.4f))
-            Text(text = "Bid Buddy", fontSize = 30.sp, modifier = Modifier.padding(end = 30.dp), fontFamily = FontFamily.Cursive, style = MaterialTheme.typography.bodyLarge)
+                modifier = Modifier.fillMaxWidth(fraction = 0.5f))
+            Text(text = "Bid Buddy", fontSize = 30.sp,
+                modifier = Modifier.padding(end = 30.dp),  style = MaterialTheme.typography.displayLarge)
         }
 
         Spacer(modifier = Modifier.fillMaxHeight(fraction = 0.2f))
@@ -74,6 +75,7 @@ Spacer(modifier = Modifier.fillMaxHeight(fraction = 0.1f))
                       text = "FaceBook",
                       modifier = Modifier,
                       textAlign = TextAlign.Center,
+                      style = MaterialTheme.typography.titleMedium,
                   )
               }
             }
@@ -98,6 +100,8 @@ Spacer(modifier = Modifier.fillMaxHeight(fraction = 0.1f))
                         Text(
                             text = "Google",
                             modifier = Modifier,
+                            style = MaterialTheme.typography.titleMedium,
+
                             textAlign = TextAlign.Center,
                         )
                     }
@@ -114,7 +118,7 @@ Spacer(modifier = Modifier.fillMaxHeight(fraction = 0.1f))
                 .fillMaxWidth(fraction = 0.8f)) {
             Row(horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()){
 
-                Icon( Icons.Outlined.MailOutline , contentDescription =  "Mail", tint =  MaterialTheme.colorScheme.onPrimary )
+                Icon( Icons.Outlined.MailOutline , contentDescription =  "Mail", tint =  MaterialTheme.colorScheme.onPrimary,modifier = Modifier.padding(top = 3.dp))
                 TextButton(onClick = {
                     navController.navigate(Routes.Login.rout)
 
@@ -123,7 +127,7 @@ Spacer(modifier = Modifier.fillMaxHeight(fraction = 0.1f))
                         text = "Login With Email ?",
                         modifier = Modifier,
                         textAlign = TextAlign.Center,
-                        style = MaterialTheme.typography.bodyLarge,
+                        style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.onPrimary,
                     )
                 }
@@ -131,13 +135,17 @@ Spacer(modifier = Modifier.fillMaxHeight(fraction = 0.1f))
             }
 
         }
-        Spacer(modifier = Modifier.fillMaxHeight(0.6f))
-        Text(text = "Don't Have An Account ?")
+        Spacer(modifier = Modifier.fillMaxHeight(0.7f))
+        Text(text = "Don't Have An Account ?" ,
+            textDecoration = TextDecoration.None,
+
+            style = MaterialTheme.typography.titleMedium)
         TextButton(onClick = {
             navController.navigate(Routes.Register.rout)
 
         }) {
             Text(text = "Register", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onPrimary,
+                style = MaterialTheme.typography.headlineMedium,
                 textDecoration = TextDecoration.Underline, fontSize = 20.sp)
         }
 

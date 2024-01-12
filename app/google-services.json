@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "708373299108",
+    "project_id": "miniproject-online-auction",
+    "storage_bucket": "miniproject-online-auction.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:708373299108:android:0cd19e2ec39fb932bd8b31",
+        "android_client_info": {
+          "package_name": "com.example.mini_oroject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "708373299108-a9iobq1hsffas4trtn7lccptgncef7d7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.mini_oroject",
+            "certificate_hash": "99c0024ae797f78f80048224dda017455d1da69a"
+          }
+        },
+        {
+          "client_id": "708373299108-utreb1l27ppqepf0jttqbdduc66mn1np.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCFG8gQWO0Xew_RBXPpdZ0fFAd5vvSM7Dc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "708373299108-utreb1l27ppqepf0jttqbdduc66mn1np.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

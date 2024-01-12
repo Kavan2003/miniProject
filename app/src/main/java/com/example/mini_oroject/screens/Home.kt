@@ -2,6 +2,9 @@ package com.example.mini_oroject.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -9,6 +12,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -19,6 +23,7 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -36,10 +41,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.bumptech.glide.integration.compose.GlideImage
+import com.bumptech.glide.integration.compose.Placeholder
 import com.example.mini_oroject.R
+import com.example.mini_oroject.routes.Routes
+import com.google.firebase.auth.FirebaseAuth
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Home(navController : NavHostController ) {
+fun Home(navController : NavHostController, auth: FirebaseAuth) {
 
     Scaffold(
 
@@ -50,14 +61,14 @@ fun Home(navController : NavHostController ) {
                     titleContentColor = MaterialTheme.colorScheme.primary,
                 ),
                 title = {
-                    Text("Welcome User", color = Color.White)
+                    Text("Welcome ${auth.currentUser?.displayName}", color = Color.White)
                 }
             )
         },
         bottomBar = {
             BottomAppBar(
                 containerColor = MaterialTheme.colorScheme.primaryContainer,
-                contentColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
             ) {
 
                   //Home Add profile past icons
@@ -71,7 +82,17 @@ fun Home(navController : NavHostController ) {
                   Icon(Icons.Default.Add, contentDescription = "Add", Modifier.weight(1.0F))
                 Spacer(modifier = Modifier.weight(1.0F))
 
-                  Icon(Icons.Default.AccountBox, contentDescription = "AccountBox", Modifier.weight(1.0F))
+                  Icon(Icons.Default.AccountBox, contentDescription = "AccountBox",
+                      Modifier
+                          .weight(1.0F)
+                          .clickable {
+
+//                      logout
+                              auth.signOut()
+                              navController.navigate(Routes.LoginChoose.rout)
+
+
+                          })
 
                 Spacer(modifier = Modifier.weight(1.0F))
 
@@ -81,12 +102,16 @@ fun Home(navController : NavHostController ) {
 
     ) { innerPadding ->
 
-        ListEventCard(Modifier.padding(innerPadding).background(Color.White))
+        ListEventCard(
+            Modifier
+                .padding(innerPadding)
+                .background(Color.White))
 
     }
 
 }
 
+@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun EventCard(
     imageUrl: String,
@@ -97,52 +122,59 @@ fun EventCard(
     onButtonClick: () -> Unit,
     modifier: Modifier
 ) {
-    Column(
-        modifier = modifier
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .padding(0.dp)
+            .clickable { onButtonClick() }
+            .background(MaterialTheme.colorScheme.background)
+            .border(1.dp, MaterialTheme.colorScheme.onPrimaryContainer)
+            .padding(10.dp)
+            .padding(horizontal = 0.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceAround,
 
-            .padding(16.dp)
-
-    ) {
-        // Image from network
-        Image(
-            painter = painterResource(id = R.drawable.ic_launcher_background),
-            contentDescription = stringResource(id = R.string.app_name)
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Text(
-            text = title,
-            color = Color.Black
-//            style = MaterialTheme.typography.h5
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Row {
-            // Start time and end time
-            Text(
-                text = startTime,
-                color = Color.Black
-//                style = MaterialTheme.typography.subtitle1
-            )
-            Spacer(modifier = Modifier.width(16.dp))
-            Text(
-                text = endTime,
-                color = Color.Black
-//                style = MaterialTheme.typography.subtitle1
-            )
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Button with price
-        Button(
-            onClick = onButtonClick,
+    ){
+        Column(
             modifier = Modifier
-                .align(Alignment.Start)
+                .padding(10.dp)
+                .padding(horizontal = 0.dp),
+
+        ){
+            GlideImage(
+                model =  imageUrl,
+                contentDescription = "Image",
+                Modifier.size(100.dp),
+
+            )
+
+        }
+        Column(
+            modifier = Modifier
+                .padding(10.dp)
+                .padding(horizontal = 0.dp)
+                .fillMaxWidth(0.999f),
+            verticalArrangement = Arrangement.SpaceAround,
+
+
+
         ) {
-            Text(text = price)
+            Text(text ="$title", style = MaterialTheme.typography.headlineMedium)
+Row {
+    Text(text = "Start Time: $startTime ", style = MaterialTheme.typography.titleSmall)
+    Text(text = "End Time: $endTime", style = MaterialTheme.typography.titleSmall)
+
+}
+            Button(onClick = { /*TODO*/ },
+
+                Modifier.align(Alignment.End),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.onPrimaryContainer, contentColor = MaterialTheme.colorScheme.primaryContainer)
+
+                ) {
+                Text(text = "Price: $price", style = MaterialTheme.typography.titleSmall)
+
+            }
+
         }
     }
 }
@@ -155,39 +187,16 @@ fun ListEventCard( modifier: Modifier = Modifier) {
 
     Column(modifier = modifier.verticalScroll(rememberScrollState())) {
 
-        Row( modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-        ) {
-            EventCard(imageUrl = "", title = "title", startTime ="15:30" , endTime = "18:50", price = "5000", onButtonClick = { /*TODO*/ },modifier = Modifier.weight(1f))
-            Spacer(modifier = Modifier.width(16.dp))
-            EventCard(imageUrl = "", title = "title", startTime ="15:30" , endTime = "18:50", price = "5000", onButtonClick = { /*TODO*/ },modifier = Modifier.weight(1f))
+        EventCard(imageUrl = "https://firebasestorage.googleapis.com/v0/b/miniproject-online-auction.appspot.com/o/car.jpg?alt=media&token=bde32f7c-61f7-49de-8633-99c8bb431fa7", title = "title", startTime ="15:30" , endTime = "18:50", price = "5000", onButtonClick = { /*TODO*/ },modifier = Modifier.weight(1f))
+        EventCard(imageUrl = "https://firebasestorage.googleapis.com/v0/b/miniproject-online-auction.appspot.com/o/car.jpg?alt=media&token=bde32f7c-61f7-49de-8633-99c8bb431fa7", title = "title", startTime ="15:30" , endTime = "18:50", price = "5000", onButtonClick = { /*TODO*/ },modifier = Modifier.weight(1f))
+        EventCard(imageUrl = "https://firebasestorage.googleapis.com/v0/b/miniproject-online-auction.appspot.com/o/car.jpg?alt=media&token=bde32f7c-61f7-49de-8633-99c8bb431fa7", title = "title", startTime ="15:30" , endTime = "18:50", price = "5000", onButtonClick = { /*TODO*/ },modifier = Modifier.weight(1f))
+        EventCard(imageUrl = "https://firebasestorage.googleapis.com/v0/b/miniproject-online-auction.appspot.com/o/car.jpg?alt=media&token=bde32f7c-61f7-49de-8633-99c8bb431fa7", title = "title", startTime ="15:30" , endTime = "18:50", price = "5000", onButtonClick = { /*TODO*/ },modifier = Modifier.weight(1f))
+        EventCard(imageUrl = "https://firebasestorage.googleapis.com/v0/b/miniproject-online-auction.appspot.com/o/car.jpg?alt=media&token=bde32f7c-61f7-49de-8633-99c8bb431fa7", title = "title", startTime ="15:30" , endTime = "18:50", price = "5000", onButtonClick = { /*TODO*/ },modifier = Modifier.weight(1f))
+        EventCard(imageUrl = "https://firebasestorage.googleapis.com/v0/b/miniproject-online-auction.appspot.com/o/car.jpg?alt=media&token=bde32f7c-61f7-49de-8633-99c8bb431fa7", title = "title", startTime ="15:30" , endTime = "18:50", price = "5000", onButtonClick = { /*TODO*/ },modifier = Modifier.weight(1f))
+        EventCard(imageUrl = "https://firebasestorage.googleapis.com/v0/b/miniproject-online-auction.appspot.com/o/car.jpg?alt=media&token=bde32f7c-61f7-49de-8633-99c8bb431fa7", title = "title", startTime ="15:30" , endTime = "18:50", price = "5000", onButtonClick = { /*TODO*/ },modifier = Modifier.weight(1f))
+        EventCard(imageUrl = "https://firebasestorage.googleapis.com/v0/b/miniproject-online-auction.appspot.com/o/car.jpg?alt=media&token=bde32f7c-61f7-49de-8633-99c8bb431fa7", title = "title", startTime ="15:30" , endTime = "18:50", price = "5000", onButtonClick = { /*TODO*/ },modifier = Modifier.weight(1f))
+        EventCard(imageUrl = "https://firebasestorage.googleapis.com/v0/b/miniproject-online-auction.appspot.com/o/car.jpg?alt=media&token=bde32f7c-61f7-49de-8633-99c8bb431fa7", title = "title", startTime ="15:30" , endTime = "18:50", price = "5000", onButtonClick = { /*TODO*/ },modifier = Modifier.weight(1f))
 
-        }
-        Row( modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)) {
-            EventCard(imageUrl = "", title = "title", startTime ="15:30" , endTime = "18:50", price = "5000", onButtonClick = { /*TODO*/ },modifier = Modifier.weight(1f))
-            Spacer(modifier = Modifier.width(16.dp))
-            EventCard(imageUrl = "", title = "title", startTime ="15:30" , endTime = "18:50", price = "5000", onButtonClick = { /*TODO*/ },modifier = Modifier.weight(1f))
-
-        }
-        Row( modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)) {
-            EventCard(imageUrl = "", title = "title", startTime ="15:30" , endTime = "18:50", price = "5000", onButtonClick = { /*TODO*/ },modifier = Modifier.weight(1f))
-            Spacer(modifier = Modifier.width(16.dp))
-            EventCard(imageUrl = "", title = "title", startTime ="15:30" , endTime = "18:50", price = "5000", onButtonClick = { /*TODO*/ },modifier = Modifier.weight(1f))
-
-        }
-        Row( modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)) {
-            EventCard(imageUrl = "", title = "title", startTime ="15:30" , endTime = "18:50", price = "5000", onButtonClick = { /*TODO*/ },modifier = Modifier.weight(1f))
-            Spacer(modifier = Modifier.width(16.dp))
-            EventCard(imageUrl = "", title = "title", startTime ="15:30" , endTime = "18:50", price = "5000", onButtonClick = { /*TODO*/ },modifier = Modifier.weight(1f))
-
-        }
     }
 }
 
@@ -196,5 +205,6 @@ fun ListEventCard( modifier: Modifier = Modifier) {
 @Composable
 fun GreetingPreview2() {
         ListEventCard(Modifier)
+
 
 }
