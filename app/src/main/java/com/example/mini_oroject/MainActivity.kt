@@ -1,6 +1,5 @@
 package com.example.mini_oroject
 
-import android.content.res.Resources.Theme
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -10,10 +9,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -23,7 +19,6 @@ import com.example.mini_oroject.screens.Home
 import com.example.mini_oroject.screens.Login
 import com.example.mini_oroject.screens.LoginChoose
 import com.example.mini_oroject.screens.Register
-import com.example.mini_oroject.ui.theme.DarkGreen
 import com.example.mini_oroject.ui.theme.Mini_orojectTheme
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -33,9 +28,10 @@ class MainActivity : ComponentActivity() {
     private lateinit var auth: FirebaseAuth
 
 
-    private var route = Routes.Home.rout
+    private var route = Routes.LoginChoose.rout
     override fun onStart() {
         super.onStart()
+
         // Check if user is signed in (non-null) and update UI accordingly.
         val currentUser = auth.currentUser
         if (currentUser != null) {
@@ -49,6 +45,7 @@ class MainActivity : ComponentActivity() {
         super.onDestroy()
 
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // Initialize Firebase Auth
@@ -62,22 +59,21 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
 
 
-
-                ) {
+                    ) {
                     val navController = rememberNavController()
-                    NavHost(navController = navController, startDestination = route ){
-                        composable(Routes.Login.rout){
-                            Login(navController = navController,auth= auth)
+                    NavHost(navController = navController, startDestination = route) {
+                        composable(Routes.Login.rout) {
+                            Login(navController = navController, auth = auth)
                         }
-                        composable(Routes.Register.rout){
-                            Register(navController = navController,auth= auth)
+                        composable(Routes.Register.rout) {
+                            Register(navController = navController, auth = auth)
                         }
-                        composable(Routes.Home.rout){
-                            Home(navController = navController,auth= auth)
+                        composable(Routes.Home.rout) {
+                            Home(navController = navController, auth = auth)
                         }
-                        composable(Routes.LoginChoose.rout){
+                        composable(Routes.LoginChoose.rout) {
                             MaterialTheme(colorScheme = MaterialTheme.colorScheme) { // Apply theme here
-                                LoginChoose(navController = navController)
+                                LoginChoose(navController = navController, auth = auth)
 
                             }
                         }
