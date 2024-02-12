@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -17,19 +16,15 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.BottomAppBar
-import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Snackbar
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.currentCompositionLocalContext
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -49,7 +44,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
 
 @Composable
-fun Register(navController: NavHostController,auth: FirebaseAuth) {
+fun Register(navController: NavHostController, auth: FirebaseAuth) {
     val context = LocalContext.current
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -67,43 +62,41 @@ fun Register(navController: NavHostController,auth: FirebaseAuth) {
                     .padding(16.dp),
 
 
-
                 ) {
-                if(!isLoading)
-                Row (
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                ){
-                    Text(
-                        text = " have an account?",
-                        style = MaterialTheme.typography.bodyMedium,
-                        modifier = Modifier.padding(bottom = 0.dp)
-                    )
-                    TextButton(
-                        onClick = { navController.navigate(Routes.Login.rout) },
+                if (!isLoading)
+                    Row(
                         modifier = Modifier
-
-
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = "Login",
+                            text = " have an account?",
                             style = MaterialTheme.typography.bodyMedium,
-                            textDecoration = TextDecoration.Underline,
-                            color = MaterialTheme.colorScheme.onPrimary,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier
+                            modifier = Modifier.padding(bottom = 0.dp)
                         )
+                        TextButton(
+                            onClick = { navController.navigate(Routes.Login.rout) },
+                            modifier = Modifier
 
+
+                        ) {
+                            Text(
+                                text = "Login",
+                                style = MaterialTheme.typography.bodyMedium,
+                                textDecoration = TextDecoration.Underline,
+                                color = MaterialTheme.colorScheme.onPrimary,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier
+                            )
+
+                        }
                     }
-                }
             }
         }
 
-    ) {
-            it ->
+    ) { it ->
 
         Column(
 
@@ -137,7 +130,7 @@ fun Register(navController: NavHostController,auth: FirebaseAuth) {
                     unfocusedContainerColor = Color.Transparent,
                     focusedContainerColor = Color.Transparent,
                     focusedLabelColor = MaterialTheme.colorScheme.inverseSurface,
-                    focusedTextColor =MaterialTheme.colorScheme.inverseSurface,
+                    focusedTextColor = MaterialTheme.colorScheme.inverseSurface,
                 ),
 
 //            textStyle = MaterialTheme.typography.bodyLarge.copy(color = MaterialTheme.colorScheme.inverseSurface),
@@ -154,7 +147,7 @@ fun Register(navController: NavHostController,auth: FirebaseAuth) {
                     unfocusedContainerColor = Color.Transparent,
                     focusedContainerColor = Color.Transparent,
                     focusedLabelColor = MaterialTheme.colorScheme.inverseSurface,
-                    focusedTextColor =MaterialTheme.colorScheme.inverseSurface,
+                    focusedTextColor = MaterialTheme.colorScheme.inverseSurface,
                 ),
 
 //            textStyle = MaterialTheme.typography.bodyLarge.copy(color = MaterialTheme.colorScheme.inverseSurface),
@@ -172,7 +165,7 @@ fun Register(navController: NavHostController,auth: FirebaseAuth) {
                     unfocusedContainerColor = Color.Transparent,
                     focusedContainerColor = Color.Transparent,
                     focusedLabelColor = MaterialTheme.colorScheme.inverseSurface,
-                    focusedTextColor =MaterialTheme.colorScheme.inverseSurface,
+                    focusedTextColor = MaterialTheme.colorScheme.inverseSurface,
                 ),
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -190,7 +183,7 @@ fun Register(navController: NavHostController,auth: FirebaseAuth) {
                     unfocusedContainerColor = Color.Transparent,
                     focusedContainerColor = Color.Transparent,
                     focusedLabelColor = MaterialTheme.colorScheme.inverseSurface,
-                    focusedTextColor =MaterialTheme.colorScheme.inverseSurface,
+                    focusedTextColor = MaterialTheme.colorScheme.inverseSurface,
                 ),
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -204,9 +197,9 @@ fun Register(navController: NavHostController,auth: FirebaseAuth) {
             OutlinedButton(
                 onClick = {
 
-                    if(password == confirmpassword)
+                    if (password == confirmpassword) {
+                        navController.navigate(Routes.Home.rout)
 
-                    {
                         isLoading = true
                         auth.createUserWithEmailAndPassword(email, password)
                             .addOnCompleteListener() { task ->
@@ -215,7 +208,7 @@ fun Register(navController: NavHostController,auth: FirebaseAuth) {
                                     // Sign in success, update UI with the signed-in user's information
                                     Log.d("TAG", "createUserWithEmail:success")
                                     val user = auth.currentUser
-                                    Toast.makeText( context ,"Registered", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(context, "Registered", Toast.LENGTH_SHORT).show()
                                     user?.updateProfile(
                                         UserProfileChangeRequest.Builder()
                                             .setDisplayName(Name)
@@ -223,25 +216,33 @@ fun Register(navController: NavHostController,auth: FirebaseAuth) {
 
                                     )
                                     navController.navigate(Routes.Home.rout)
-                                    Log.d("TAG", "Register:"+ user?.email)
+                                    Log.d("TAG", "Register:" + user?.email)
 //                                updateUI(user)
                                 } else {
                                     // If sign in fails, display a message to the user.
                                     val exception = task.exception
 
                                     if (exception != null) {
-                                        Toast.makeText(context, ""+exception.localizedMessage, Toast.LENGTH_SHORT).show()
+                                        Toast.makeText(
+                                            context,
+                                            "" + exception.localizedMessage,
+                                            Toast.LENGTH_SHORT
+                                        ).show()
                                     }
 
-                                    Log.w("TAG", "createUserWithEmail:failure", exception)  }
+                                    Log.w("TAG", "createUserWithEmail:failure", exception)
+                                }
 
                             }
-                    }
-                    else
-                        Toast.makeText( context ," Confirm Password & Password Not Matched", Toast.LENGTH_SHORT).show()
-//                    navController.navigate(Routes.Home.rout)
+                    } else
+                        Toast.makeText(
+                            context,
+                            " Confirm Password & Password Not Matched",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    navController.navigate(Routes.Home.rout)
 
-                          },
+                },
                 modifier = Modifier
                     .fillMaxWidth(0.6f)
                     .height(50.dp)

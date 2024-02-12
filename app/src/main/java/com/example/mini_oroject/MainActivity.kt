@@ -27,8 +27,8 @@ import com.google.firebase.ktx.Firebase
 class MainActivity : ComponentActivity() {
     private lateinit var auth: FirebaseAuth
 
-
-    private var route = Routes.LoginChoose.rout
+    //TODO:
+    private var route = Routes.Home.rout
     override fun onStart() {
         super.onStart()
 
