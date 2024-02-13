@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -43,7 +44,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
@@ -52,6 +52,7 @@ import com.bumptech.glide.integration.compose.RequestState
 import com.example.mini_oroject.R
 import com.example.mini_oroject.routes.Routes
 import com.example.mini_oroject.sampledata.Event
+import com.example.mini_oroject.ui.theme.LightGrey
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -60,9 +61,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Home(navController: NavHostController, auth: FirebaseAuth) {
-
-//    var ImageTemp =
-//        "https://media.istockphoto.com/id/1147135094/photo/3d-illustration-of-generic-compact-car-front-view-closeup-shot.jpg?s=2048x2048&w=is&k=20&c=G1oXakNHxcZk6snjDw5X4Kx4AoQkpd8MySpIQlFPa_k=";
     var tabIndex = remember { mutableIntStateOf(0) }
     var events = remember { mutableStateListOf<Event>() };
 
@@ -185,9 +183,6 @@ fun Home(navController: NavHostController, auth: FirebaseAuth) {
                         .weight(1.0F)
                         .clickable {
 
-//                      logout
-//                            auth.signOut()
-//                            navController.navigate(Routes.LoginChoose.rout)
                             tabIndex.intValue = 3
 
                         })
@@ -263,20 +258,14 @@ fun EventCard(
 ) {
     Row(
         modifier
-            .clickable { onButtonClick() }
-            .background(MaterialTheme.colorScheme.background)
-            .border(1.dp, MaterialTheme.colorScheme.onPrimaryContainer)
-
-            .fillMaxWidth()
-
-            .height(140.dp),
+            .clickable { onButtonClick() },
         verticalAlignment = Alignment.CenterVertically
     ) {
         Column(
             modifier = Modifier
                 .weight(1f)
                 .fillMaxHeight()
-               
+
                 .padding(10.dp),
             verticalArrangement = Arrangement.Center // Center content vertically
         ) {
@@ -292,7 +281,13 @@ fun EventCard(
                         contentDescription = null
                     )
 
-                    RequestState.Loading -> CircularProgressIndicator()
+                    RequestState.Loading -> CircularProgressIndicator(
+                        color = LightGrey,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .wrapContentSize(Alignment.Center)
+                    )
+
                     is RequestState.Success -> Image(
                         painter, contentDescription = null, Modifier.clip(
                             RoundedCornerShape(
@@ -305,18 +300,12 @@ fun EventCard(
                     )
                 }
             }
-//            GlideImage(
-//
-//                alignment = Alignment.Center,
-//                model = imageUrl,
-//                contentDescription = "Image",
-//                modifier = Modifier.fillMaxSize()
-//            )
+
         }
         Column(
             modifier = Modifier
                 .fillMaxHeight()
-                .weight(1f), // Equal weight for image and details
+                .weight(1f),
             verticalArrangement = Arrangement.SpaceAround
         ) {
             Text(text = title, style = MaterialTheme.typography.headlineMedium)
@@ -351,28 +340,6 @@ fun ListEventCard(modifier: Modifier = Modifier, events: List<Event>) {
 
     ) {
 
-//        Row(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .padding(10.dp),
-//            horizontalArrangement = Arrangement.Start,
-//            verticalAlignment = Alignment.CenterVertically,
-//        ) {
-//            Button(
-//                onClick = { /*TODO*/ },
-//
-//                Modifier.border(1.dp, MaterialTheme.colorScheme.onPrimary),
-//                colors = ButtonDefaults.buttonColors(
-//                    containerColor = Color.Transparent,
-//                    contentColor = MaterialTheme.colorScheme.onPrimary
-//                )
-//
-//            ) {
-//                Text(text = "Filters")
-//            }
-//        }
-
-
         events.forEach {
             EventCard(
                 imageUrl = it.imageUrl,
@@ -382,16 +349,17 @@ fun ListEventCard(modifier: Modifier = Modifier, events: List<Event>) {
                 price = it.initialPrice.toString(),
                 onButtonClick = { /*TODO*/ },
                 modifier = Modifier
+
+//            .background(MaterialTheme.colorScheme.background)
+                    .fillMaxWidth()
+                    .height(140.dp)
+                    .border(
+                        1.dp,
+                        MaterialTheme.colorScheme.onPrimaryContainer,
+                        RoundedCornerShape(25.dp)
+                    )
             )
         }
 
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview2() {
-//        ListEventCard(Modifier)
-
-
 }
