@@ -1,4 +1,4 @@
-package com.example.mini_oroject.screens
+package com.example.mini_oroject.screens.login_register
 
 import android.util.Log
 import android.widget.Toast

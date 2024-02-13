@@ -15,10 +15,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.mini_oroject.routes.Routes
-import com.example.mini_oroject.screens.Home
-import com.example.mini_oroject.screens.Login
-import com.example.mini_oroject.screens.LoginChoose
-import com.example.mini_oroject.screens.Register
+import com.example.mini_oroject.screens.home.Home
+import com.example.mini_oroject.screens.login_register.Login
+import com.example.mini_oroject.screens.login_register.LoginChoose
+import com.example.mini_oroject.screens.login_register.Register
+import com.example.mini_oroject.screens.profile.Profile
 import com.example.mini_oroject.ui.theme.Mini_orojectTheme
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -41,10 +42,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,6 +72,11 @@ class MainActivity : ComponentActivity() {
                             MaterialTheme(colorScheme = MaterialTheme.colorScheme) { // Apply theme here
                                 LoginChoose(navController = navController, auth = auth)
 
+                            }
+                        }
+                        composable(Routes.Profile.rout) {
+                            MaterialTheme(colorScheme = MaterialTheme.colorScheme) { // Apply theme here
+                                Profile(navController = navController, auth = auth)
                             }
                         }
                     }

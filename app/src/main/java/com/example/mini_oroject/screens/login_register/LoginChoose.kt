@@ -1,4 +1,4 @@
-package com.example.mini_oroject.screens
+package com.example.mini_oroject.screens.login_register
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -114,7 +114,7 @@ fun LoginChoose(navController: NavHostController, auth: FirebaseAuth) {
 
                             //Here Sign With google
 
-                            
+
                         }
                     )
                 )
