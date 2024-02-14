@@ -1,4 +1,4 @@
-package com.example.mini_oroject.sampledata
+package com.example.mini_oroject.screens.bottombar
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Spacer

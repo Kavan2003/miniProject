@@ -59,7 +59,8 @@ fun EventCard(
                 when (state) {
                     RequestState.Failure -> Image(
                         painter = painterResource(id = R.drawable.wifi_foreground),
-                        contentDescription = null
+                        contentDescription = null,
+
                     )
 
                     RequestState.Loading -> CircularProgressIndicator(
