@@ -6,4 +6,5 @@ sealed class Routes(val rout: String) {
     object Register : Routes("register")
     object LoginChoose : Routes("loginChoose")
     object Profile : Routes("profile")
+    object Event : Routes("event")
 }

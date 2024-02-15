@@ -1,4 +1,4 @@
-package com.example.mini_oroject.sampledata
+package com.example.mini_oroject.data_model
 
 
 class Event {

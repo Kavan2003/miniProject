@@ -22,7 +22,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.example.mini_oroject.sampledata.Event
+import com.example.mini_oroject.data_model.Event
 import com.example.mini_oroject.screens.bottombar.Bottombar
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth

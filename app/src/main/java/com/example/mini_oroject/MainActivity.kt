@@ -15,6 +15,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.mini_oroject.routes.Routes
+import com.example.mini_oroject.screens.create.CreatePost
 import com.example.mini_oroject.screens.home.Home
 import com.example.mini_oroject.screens.login_register.Login
 import com.example.mini_oroject.screens.login_register.LoginChoose
@@ -77,6 +78,11 @@ class MainActivity : ComponentActivity() {
                         composable(Routes.Profile.rout) {
                             MaterialTheme(colorScheme = MaterialTheme.colorScheme) { // Apply theme here
                                 Profile(navController = navController, auth = auth)
+                            }
+                        }
+                        composable(Routes.Event.rout) {
+                            MaterialTheme(colorScheme = MaterialTheme.colorScheme) { // Apply theme here
+                                CreatePost(navController = navController, auth = auth)
                             }
                         }
                     }

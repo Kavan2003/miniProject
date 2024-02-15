@@ -23,7 +23,7 @@ fun Bottombar(navController: NavHostController) {
         contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
     ) {
 
-        //Home Add profile past icons
+
         Spacer(modifier = Modifier.weight(1.0F))
 
         Icon(
@@ -42,7 +42,6 @@ fun Bottombar(navController: NavHostController) {
             Modifier
                 .weight(1.0F)
                 .clickable {
-//                    tabIndex.intValue = 1
 
                 })
         Spacer(modifier = Modifier.weight(1.0F))
@@ -52,8 +51,7 @@ fun Bottombar(navController: NavHostController) {
             Modifier
                 .weight(1.0F)
                 .clickable {
-//                    tabIndex.intValue = 2
-
+                    navController.navigate(Routes.Event.rout)
                 })
         Spacer(modifier = Modifier.weight(1.0F))
 
