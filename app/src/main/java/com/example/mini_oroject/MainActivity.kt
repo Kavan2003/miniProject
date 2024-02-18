@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -30,23 +31,49 @@ class MainActivity : ComponentActivity() {
     private lateinit var auth: FirebaseAuth
 
     //TODO:
-    private var route = Routes.Home.rout
-    override fun onStart() {
-        super.onStart()
+    private var route = Routes.LoginChoose.rout
+//    override fun onStart() {
+//        super.onStart()
+//
+//        // Check if user is signed in (non-null) and update UI accordingly.
+//
+//    }
 
-        // Check if user is signed in (non-null) and update UI accordingly.
-        val currentUser = auth.currentUser
-        if (currentUser != null) {
-            Log.d("TAG", "onStart: Login user already")
-            route = Routes.Home.rout
-
-        }
-    }
-
+//    suspend fun initi(): Boolean {
+//        val currentUser = auth.currentUser
+//
+//        route = if (currentUser != null) {
+//            Log.d("TAG", "onStart: Login user already")
+//            Routes.Home.rout
+//
+//        } else {
+//            Log.d("TAG", "onStart: No user")
+//            Routes.LoginChoose.rout
+//
+//        }
+//        delay(1000)
+//        return false
+//
+//
+//    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // Initialize Firebase Auth
+
+        installSplashScreen().apply {
+            setKeepOnScreenCondition {
+                val currentUser = auth.currentUser
+                route = if (currentUser != null) {
+                    Log.d("TAG", "onStart: Login user already")
+                    Routes.Home.rout
+                } else {
+                    Log.d("TAG", "onStart: No user")
+                    Routes.LoginChoose.rout
+                }
+                false
+            }
+        }
 
         auth = Firebase.auth
         setContent {
