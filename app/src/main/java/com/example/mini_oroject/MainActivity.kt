@@ -32,30 +32,6 @@ class MainActivity : ComponentActivity() {
 
     //TODO:
     private var route = Routes.LoginChoose.rout
-//    override fun onStart() {
-//        super.onStart()
-//
-//        // Check if user is signed in (non-null) and update UI accordingly.
-//
-//    }
-
-//    suspend fun initi(): Boolean {
-//        val currentUser = auth.currentUser
-//
-//        route = if (currentUser != null) {
-//            Log.d("TAG", "onStart: Login user already")
-//            Routes.Home.rout
-//
-//        } else {
-//            Log.d("TAG", "onStart: No user")
-//            Routes.LoginChoose.rout
-//
-//        }
-//        delay(1000)
-//        return false
-//
-//
-//    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

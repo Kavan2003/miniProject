@@ -10,8 +10,6 @@
         android:pivotX="72"
         android:pivotY="72"
         android:rotation="0"
-
-
         >
         <path
             android:fillColor="#112B3F"

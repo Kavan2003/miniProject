@@ -59,10 +59,11 @@ fun Register(navController: NavHostController, auth: FirebaseAuth) {
                 containerColor = Color.Transparent,
                 modifier = Modifier
 
-                    .padding(16.dp),
+                    .padding(top = 5.dp, bottom = 5.dp, end = 0.dp, start = 0.dp),
+                tonalElevation = 10.dp
 
 
-                ) {
+            ) {
                 if (!isLoading)
                     Row(
                         modifier = Modifier

@@ -174,11 +174,13 @@ fun Login(navController: NavHostController, auth: FirebaseAuth) {
                                     context,
                                     "Login Failed ${it.exception?.message}",
                                     Toast.LENGTH_SHORT
+
                                 ).show()
+//                                navController.navigate(Routes.Login.rout)
 
                             }
                         }
-                    navController.navigate(Routes.Home.rout)
+//                    navController.navigate(Routes.Home.rout)
 
                 },
                 modifier = Modifier
