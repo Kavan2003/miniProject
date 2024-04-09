@@ -26,7 +26,30 @@ import com.example.mini_oroject.data_model.Event
 import com.example.mini_oroject.screens.bottombar.Bottombar
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.FirebaseFirestore
+
+fun listenForPriceChanges(itemId: String) {
+    val database = FirebaseDatabase.getInstance()
+    val myRef = database.getReference("items")
+
+    val priceListener = object : ValueEventListener {
+        override fun onDataChange(dataSnapshot: DataSnapshot) {
+            val updatedPrice =
+                dataSnapshot.child(itemId).child("price").getValue(Double::class.java)
+            // Do something with the updated price
+        }
+
+        override fun onCancelled(databaseError: DatabaseError) {
+            // Failed to read value
+            Log.w("TAG", "Failed to read value.", databaseError.toException())
+        }
+    }
+    myRef.addValueEventListener(priceListener)
+}
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -47,6 +70,7 @@ fun Home(navController: NavHostController, auth: FirebaseAuth) {
 
                 events.add(
                     Event(
+                        id = document.id,
                         categories = (if ((document.data["Categories"] != null)) {
                             document.data["Categories"] as List<String>
                         } else {
@@ -57,33 +81,37 @@ fun Home(navController: NavHostController, auth: FirebaseAuth) {
                         } else {
                             "description not available"
                         }) as String,
-                        imageUrl = (if ((document.data["imageURL"] != null)) {
-                            document.data["imageURL"] as String
-
+                        imageUrl = (if ((document.data["imageurl"] != null) && (document.data["imageurl"] as List<String>).isNotEmpty()) {
+                            document.data["imageurl"] as List<String>
                         } else {
-                            "https://firebasestorage.googleapis.com/v0/b/mini-oroproject.appspot.com/o/images%2Fimage_picker_2021-09-27-16-11-46-1.jpg?alt=media&token=3b9b9b1a-9b9a-4b9e-9b0a-9b9b9b9b9b9b"
-                        }) as String,
+                            listOf("")
+                        }),
                         initialPrice = (if ((document.data["initialPrice"] != null)) {
                             document.data["initialPrice"] as String
                         } else {
                             "0"
-                        }) as String,
+                        }),
                         itemname = (if ((document.data["itemname"] != null)) {
                             document.data["itemname"] as String
                         } else {
                             "itemname not available"
-                        }) as String,
+                        }),
                         startTime = (if ((document.data["startTime"] != null)) {
                             (document.data["startTime"] as Timestamp).toDate().toString()
                         } else {
                             "startTime not available"
-                        }) as String,
-                        endTime = "endTime not available",
+                        }),
+                        endTime = (if ((document.data["endTime"] != null)) {
+                            (document.data["endTime"] as Timestamp).toDate().toString()
+                        } else {
+                            "endTime not available"
+                        }),
 
                         )
 
                 )
-                Log.d("TAG 110 line EVENT", events[0].description)
+                Log.d("TAG 86 line EVENT", events.toString())
+
             }
         }
 
@@ -121,7 +149,9 @@ fun Home(navController: NavHostController, auth: FirebaseAuth) {
                     Modifier
                         .padding(innerPadding)
                         .background(Color.White),
-                    events
+                    events,
+
+                    navController
                 )
             else if (tabIndex.intValue == 1)
                 Column(
@@ -148,19 +178,7 @@ fun Home(navController: NavHostController, auth: FirebaseAuth) {
                     Text(text = "Selected page: Add Item")
 
                 }
-//            else if (tabIndex.intValue == 3)
-//                Column(
-//                    modifier = Modifier
-//                        .padding(innerPadding)
-//                        .fillMaxSize(),
-//                    verticalArrangement = Arrangement.Center,
-//                    horizontalAlignment = Alignment.CenterHorizontally
-//                ) {
-//                    Text(text = "Selected page: Profile")
-//                    Button(onClick = { navController.navigate(Routes.LoginChoose.rout) }) {
-//                        Text("Logout")
-//                    }
-//                }
+
 
         }
     )

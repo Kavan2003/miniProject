@@ -1,53 +1,61 @@
 package com.example.mini_oroject.screens.home
 
+// Import DraggableState and Orientation
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.example.mini_oroject.data_model.Event
-
+import com.example.mini_oroject.routes.Routes
+import com.example.mini_oroject.screens.create.PostData
+import com.example.mini_oroject.screens.create.postDataSerializer
 
 @Composable
-fun ListEventCard(modifier: Modifier = Modifier, events: List<Event>) {
+fun ListEventCard(
+    modifier: Modifier = Modifier,
+    events: List<Event>,
+    navController: NavHostController,
+) {
+    val offsetX = remember { mutableStateOf(0f) }
+    val maxOffsetX = 200f // Threshold for swipe distance
 
-    Column(
+    val currentIndex = remember { mutableStateOf(0) } // Track current item index
+
+
+
+    LazyColumn(
         modifier = modifier
-            .verticalScroll(rememberScrollState())
             .background(MaterialTheme.colorScheme.secondary)
             .padding(10.dp)
-
-
     ) {
+        items(events) { event ->
+            EventReelCard(
+                navController = navController,
+                event = event,
+                modifier = Modifier,
+                onEventClick = {
 
-        events.forEach {
-            EventCard(
-                imageUrl = it.imageUrl,
-                title = it.itemname,
-                startTime = it.startTime,
-                endTime = it.endTime,
-                price = it.initialPrice.toString(),
-                onButtonClick = { /*TODO*/ },
-                modifier = Modifier
-
-//            .background(MaterialTheme.colorScheme.background)
-                    .fillMaxWidth()
-                    .height(140.dp)
-                    .border(
-                        1.dp,
-                        MaterialTheme.colorScheme.onPrimaryContainer,
-                        RoundedCornerShape(25.dp)
+                    var p = PostData(
+                        id = event.id,
+                        title = event.itemname,
+                        selectedStartDate = event.startTime,
+                        selectedEndDate = "",
+                        price = event.initialPrice.toString(),
+                        productDescription = event.description
                     )
+                    //convert to string
+                    val data = postDataSerializer(p)
+
+                    navController.navigate(Routes.EventDetails.rout + "/$data")
+                }
             )
         }
-
     }
 }

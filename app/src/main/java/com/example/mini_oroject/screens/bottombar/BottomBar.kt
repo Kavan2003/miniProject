@@ -6,7 +6,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -38,7 +38,7 @@ fun Bottombar(navController: NavHostController) {
                 })
         Spacer(modifier = Modifier.weight(1.0F))
         Icon(
-            Icons.Default.Search, contentDescription = "Search",
+            Icons.Default.Notifications, contentDescription = "Search",
             Modifier
                 .weight(1.0F)
                 .clickable {

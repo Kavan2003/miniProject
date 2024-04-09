@@ -8,11 +8,13 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.BottomAppBar
@@ -42,6 +44,8 @@ import androidx.navigation.NavHostController
 import com.example.mini_oroject.routes.Routes
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
+import com.google.firebase.firestore.FirebaseFirestore
+
 
 @Composable
 fun Register(navController: NavHostController, auth: FirebaseAuth) {
@@ -51,6 +55,8 @@ fun Register(navController: NavHostController, auth: FirebaseAuth) {
     var Name by remember { mutableStateOf("") }
     var isLoading by remember { mutableStateOf(false) }
     var confirmpassword by remember { mutableStateOf("") }
+    var phone by remember { mutableStateOf("") }
+    var address by remember { mutableStateOf("") }
 
     Scaffold(
         bottomBar = {
@@ -157,6 +163,47 @@ fun Register(navController: NavHostController, auth: FirebaseAuth) {
             )
 
             Spacer(modifier = Modifier.height(10.dp))
+            TextField(
+                value = phone,
+                onValueChange = { phone = it },
+                label = { Text("Phone Number") },
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
+                colors = TextFieldDefaults.colors(
+                    unfocusedContainerColor = Color.Transparent,
+                    focusedContainerColor = Color.Transparent,
+                    focusedLabelColor = MaterialTheme.colorScheme.inverseSurface,
+                    focusedTextColor = MaterialTheme.colorScheme.inverseSurface,
+                ),
+
+//            textStyle = MaterialTheme.typography.bodyLarge.copy(color = MaterialTheme.colorScheme.inverseSurface),
+                textStyle = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier.fillMaxWidth()
+            )
+            TextField(
+                value = address,
+                onValueChange = { address = it },
+                label = { Text("Address") },
+                singleLine = false,
+                shape = RoundedCornerShape(50.dp),
+                minLines = 3,
+                maxLines = 5,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                colors = TextFieldDefaults.colors(
+                    unfocusedContainerColor = Color.Transparent,
+                    focusedContainerColor = Color.Transparent,
+                    focusedLabelColor = MaterialTheme.colorScheme.inverseSurface,
+                    focusedTextColor = MaterialTheme.colorScheme.inverseSurface,
+                ),
+
+                textStyle = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight(0.3f)
+            )
+
+
+            Spacer(modifier = Modifier.height(10.dp))
 
             TextField(
                 value = password,
@@ -204,7 +251,7 @@ fun Register(navController: NavHostController, auth: FirebaseAuth) {
                         isLoading = true
                         auth.createUserWithEmailAndPassword(email, password)
                             .addOnCompleteListener() { task ->
-                                isLoading = false
+
                                 if (task.isSuccessful) {
                                     // Sign in success, update UI with the signed-in user's information
                                     Log.d("TAG", "createUserWithEmail:success")
@@ -214,8 +261,32 @@ fun Register(navController: NavHostController, auth: FirebaseAuth) {
                                         UserProfileChangeRequest.Builder()
                                             .setDisplayName(Name)
                                             .build()
-
                                     )
+
+                                    val db = FirebaseFirestore.getInstance()
+                                    val userData = hashMapOf(
+                                        "Uid" to (auth.currentUser?.uid ?: "N/A"),
+                                        "Name" to Name,
+                                        "Email" to email,
+                                        "Phone" to phone,
+                                        "Address" to address
+                                    )
+                                    if (user != null)
+                                        db.collection("users_data").document(user.uid)
+                                            .set(userData)
+                                            .addOnSuccessListener {
+                                                Log.d("TAG", "User data stored successfully")
+                                                navController.navigate(Routes.Home.rout)
+                                            }
+                                            .addOnFailureListener { exception ->
+                                                Log.w("TAG", "Error storing user data", exception)
+                                                Toast.makeText(
+                                                    context,
+                                                    "Error registering: ${exception.localizedMessage}",
+                                                    Toast.LENGTH_SHORT
+                                                ).show()
+                                            }
+                                    isLoading = false
                                     navController.navigate(Routes.Home.rout)
                                     Log.d("TAG", "Register:" + user?.email)
 //                                updateUI(user)

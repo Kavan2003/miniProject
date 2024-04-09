@@ -7,4 +7,9 @@ sealed class Routes(val rout: String) {
     object LoginChoose : Routes("loginChoose")
     object Profile : Routes("profile")
     object Event : Routes("event")
+    object notification : Routes("notification")
+    object CreatePost : Routes("CreatePost")
+    object EventDetails : Routes("EventDetails")
+
+    object Image : Routes("com.example.mini_oroject.screens.create.ImageUpload")
 }
