@@ -7,6 +7,11 @@ import com.google.gson.Gson
 data class PostData(
     var id: String = "",
     var title: String,
+    var priceshipping: String,
+    var returnpolicy: String,
+    var shippingpolicy: String,
+    var condition: String,
+
     var selectedStartDate: String,
     var selectedEndDate: String,
     var price: String,

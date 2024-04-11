@@ -16,6 +16,8 @@ import com.example.mini_oroject.data_model.Event
 import com.example.mini_oroject.routes.Routes
 import com.example.mini_oroject.screens.create.PostData
 import com.example.mini_oroject.screens.create.postDataSerializer
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 
 @Composable
 fun ListEventCard(
@@ -48,7 +50,14 @@ fun ListEventCard(
                         selectedStartDate = event.startTime,
                         selectedEndDate = "",
                         price = event.initialPrice.toString(),
-                        productDescription = event.description
+                        productDescription = URLEncoder.encode(
+                            event.description,
+                            StandardCharsets.UTF_8.toString()
+                        ),
+                        priceshipping = event.priceshipping,
+                        returnpolicy = event.returnpolicy,
+                        shippingpolicy = event.shippingpolicy,
+                        condition = event.condition
                     )
                     //convert to string
                     val data = postDataSerializer(p)

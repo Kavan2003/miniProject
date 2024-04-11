@@ -90,6 +90,16 @@ enum class _ReturnType(val description: String) {
     fourteen("14 days Return")
 }
 
+enum class _AuctionCategory(val description: String) {
+    Electronics("Electronics"),
+    Furniture("Furniture"),
+    Vehicles("Vehicles"),
+    RealEstate("Real Estate"),
+    Clothing("Clothing"),
+    Books("Books"),
+    Art("Art"),
+    Collectibles("Collectibles")
+}
 
 @Composable
 fun ImageUpload(navController: NavHostController, auth: FirebaseAuth, data: PostData) {
@@ -107,10 +117,14 @@ fun ImageUpload(navController: NavHostController, auth: FirebaseAuth, data: Post
     var priceshipping by remember {
         mutableStateOf("")
     }
+    var auctionCategory by remember {
+        mutableStateOf(_AuctionCategory.Electronics)
+    }
 
 
     var expanded by remember { mutableStateOf(false) }
     var expanded2 by remember { mutableStateOf(false) }
+    var expanded3 by remember { mutableStateOf(false) }
 
     val launcher =
         rememberLauncherForActivityResult(ActivityResultContracts.PickMultipleVisualMedia()) { uris ->
@@ -143,15 +157,16 @@ fun ImageUpload(navController: NavHostController, auth: FirebaseAuth, data: Post
         "endTime" to stringToFirebaseTimestamp(data.selectedEndDate),
         "initialPrice" to data.price,
         "created_by" to auth.currentUser?.uid,
-        "Categories" to listOf("Nothing"), // Replace with logic to get categories
         "description" to data.productDescription,
         "imageurl" to uploadedImageUrls,
         "priceshipping" to priceshipping,
         "shippingpolicy" to shippingpolicy,
         "condition" to selectedCondition.description,
         "returnpolicy" to selectedReturn.description,
-        
-        )
+        "category" to auctionCategory.description,
+        "test" to "test"
+
+    )
 
 
     val imageUploader = remember { ImageUploader(FirebaseStorage.getInstance()) }
@@ -247,6 +262,37 @@ fun ImageUpload(navController: NavHostController, auth: FirebaseAuth, data: Post
                         }
                     }
 
+                    Row {
+                        Text(
+                            text = "Item Category: ${auctionCategory.description}",
+                            modifier = Modifier
+                                .clickable { expanded3 = true }
+                                .padding(10.dp)
+                                .border(
+                                    1.dp,
+                                    MaterialTheme.colorScheme.onSurface,
+                                    MaterialTheme.shapes.small,
+                                )
+                                .padding(10.dp)
+
+                        )
+                        DropdownMenu(
+                            expanded = expanded3,
+                            onDismissRequest = { expanded3 = false },
+                        ) {
+                            _AuctionCategory.entries.forEach { condition ->
+                                DropdownMenuItem(
+                                    onClick = {
+                                        auctionCategory = condition
+                                        expanded3 = false
+                                    },
+                                    text = { Text(condition.description) }
+
+                                )
+                            }
+                        }
+                    }
+
 
 
                     Row {
@@ -330,7 +376,7 @@ fun ImageUpload(navController: NavHostController, auth: FirebaseAuth, data: Post
                             .fillMaxWidth()
                             .background(MaterialTheme.colorScheme.onBackground),
                     ) {
-                        Text(text = "Next");
+                        Text(text = "Next")
                     }
 
 

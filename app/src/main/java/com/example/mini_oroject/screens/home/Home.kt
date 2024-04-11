@@ -56,7 +56,7 @@ fun listenForPriceChanges(itemId: String) {
 @Composable
 fun Home(navController: NavHostController, auth: FirebaseAuth) {
     var tabIndex = remember { mutableIntStateOf(0) }
-    var events = remember { mutableStateListOf<Event>() };
+    var events = remember { mutableStateListOf<Event>() }
 
     FirebaseFirestore.getInstance().collection("auction_item")
         .get()
@@ -66,21 +66,41 @@ fun Home(navController: NavHostController, auth: FirebaseAuth) {
 
 
             for (document in documents) {
-                Log.i("TAG", document.toString())
+
 
                 events.add(
                     Event(
                         id = document.id,
-                        categories = (if ((document.data["Categories"] != null)) {
-                            document.data["Categories"] as List<String>
+                        condition = (if ((document.data["condition"] != null)) {
+                            document.data["condition"] as String
                         } else {
-                            listOf("Categories not available")
-                        }) as List<String>,
+                            "condition not available"
+                        }),
+                        priceshipping = (if ((document.data["priceshipping"] != null)) {
+                            document.data["priceshipping"] as String
+                        } else {
+                            "priceshipping not available"
+                        }),
+                        returnpolicy = (if ((document.data["returnpolicy"] != null)) {
+                            document.data["returnpolicy"] as String
+                        } else {
+                            "returnpolicy not available"
+                        }),
+                        shippingpolicy = (if ((document.data["shippingpolicy"] != null)) {
+                            document.data["shippingpolicy"] as String
+                        } else {
+                            "shippingpolicy not available"
+                        }),
+                        categories = (if ((document.data["Categories"] != null)) {
+                            document.data["Categories"] as String
+                        } else {
+                            "Categories not available"
+                        }),
                         description = (if ((document.data["description"] != null)) {
                             document.data["description"] as String
                         } else {
                             "description not available"
-                        }) as String,
+                        }),
                         imageUrl = (if ((document.data["imageurl"] != null) && (document.data["imageurl"] as List<String>).isNotEmpty()) {
                             document.data["imageurl"] as List<String>
                         } else {
@@ -110,7 +130,6 @@ fun Home(navController: NavHostController, auth: FirebaseAuth) {
                         )
 
                 )
-                Log.d("TAG 86 line EVENT", events.toString())
 
             }
         }
@@ -162,21 +181,6 @@ fun Home(navController: NavHostController, auth: FirebaseAuth) {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(text = "Selected page: Search")
-                }
-            else if (tabIndex.intValue == 2)
-                Column(
-                    modifier = Modifier
-                        .padding(innerPadding)
-
-                        .fillMaxSize(),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(text = "Selected page: Add Item")
-                    Text(text = "Selected page: Add Item")
-                    Text(text = "Selected page: Add Item")
-                    Text(text = "Selected page: Add Item")
-
                 }
 
 

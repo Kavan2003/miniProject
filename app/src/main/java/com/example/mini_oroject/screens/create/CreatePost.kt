@@ -320,7 +320,10 @@ fun CreatePost(navController: NavHostController, auth: FirebaseAuth) {
                                     URLEncoder.encode(
                                         productDescription,
                                         StandardCharsets.UTF_8.toString()
-                                    )
+                                    ),
+                                    shippingpolicy = "shipping policy",
+                                    returnpolicy = "return policy",
+                                    priceshipping = "", condition = ""
 
                                 )
 

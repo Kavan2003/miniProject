@@ -250,7 +250,7 @@ fun Register(navController: NavHostController, auth: FirebaseAuth) {
 
                         isLoading = true
                         auth.createUserWithEmailAndPassword(email, password)
-                            .addOnCompleteListener() { task ->
+                            .addOnCompleteListener { task ->
 
                                 if (task.isSuccessful) {
                                     // Sign in success, update UI with the signed-in user's information

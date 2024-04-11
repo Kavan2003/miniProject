@@ -19,6 +19,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.mini_oroject.routes.Routes
+import com.example.mini_oroject.screens.Bid_History.bidScreen
 import com.example.mini_oroject.screens.create.CreatePost
 import com.example.mini_oroject.screens.create.ImageUpload
 import com.example.mini_oroject.screens.create.JsonToPostData
@@ -26,6 +27,7 @@ import com.example.mini_oroject.screens.home.Home
 import com.example.mini_oroject.screens.login_register.Login
 import com.example.mini_oroject.screens.login_register.LoginChoose
 import com.example.mini_oroject.screens.login_register.Register
+import com.example.mini_oroject.screens.notification.NotificationScreen
 import com.example.mini_oroject.screens.profile.Profile
 import com.example.mini_oroject.ui.theme.Mini_orojectTheme
 import com.google.firebase.auth.FirebaseAuth
@@ -73,6 +75,19 @@ class MainActivity : ComponentActivity() {
                         composable(Routes.Login.rout) {
                             Login(navController = navController, auth = auth)
                         }
+                        composable(Routes.bid_his.rout) {
+                            bidScreen(navController = navController, auth = auth)
+                        }
+                        composable(Routes.bid_his_des.rout + "/{data}") { backStackEntry ->
+                            val data = backStackEntry.arguments?.getString("data")
+                            if (data != null) {
+                                pEventDetails(id = data, auth = auth)
+                            } else {
+                                Text("Error data is null in main activity")
+                            }
+                        }
+
+
                         composable(Routes.Register.rout) {
                             Register(navController = navController, auth = auth)
                         }
@@ -95,15 +110,29 @@ class MainActivity : ComponentActivity() {
                                 CreatePost(navController = navController, auth = auth)
                             }
                         }
-                        composable(Routes.Event.rout) {
+                        composable(Routes.notification.rout) {
                             MaterialTheme(colorScheme = MaterialTheme.colorScheme) { // Apply theme here
-                                CreatePost(navController = navController, auth = auth)
+                                NotificationScreen(
+
+
+                                    navController = navController,
+                                    auth = FirebaseAuth.getInstance()
+
+
+                                )
+
                             }
                         }
                         composable(Routes.EventDetails.rout + "/{data}") { backStackEntry ->
                             val data = backStackEntry.arguments?.getString("data")
                             val p = data?.let { it1 -> JsonToPostData(it1) }
 //                            val myObject = fromJson(data.orEmpty())
+                            if (p != null) {
+                                p.productDescription = URLDecoder.decode(
+                                    (p.productDescription),
+                                    StandardCharsets.UTF_8.toString()
+                                )
+                            }
                             MaterialTheme(colorScheme = MaterialTheme.colorScheme) { // Apply theme here
                                 if (p != null) {
                                     EventDetails(
@@ -120,13 +149,13 @@ class MainActivity : ComponentActivity() {
                         composable(Routes.Image.rout + "/{data}") { backStackEntry ->
                             val data = backStackEntry.arguments?.getString("data")
                             val p = data?.let { it1 -> JsonToPostData(it1) }
-//                            val myObject = fromJson(data.orEmpty())
                             if (p != null) {
                                 p.productDescription = URLDecoder.decode(
                                     (p.productDescription),
                                     StandardCharsets.UTF_8.toString()
                                 )
                             }
+//                            val myObject = fromJson(data.orEmpty())
                             MaterialTheme(colorScheme = MaterialTheme.colorScheme) { // Apply theme here
                                 if (p != null) {
                                     ImageUpload(

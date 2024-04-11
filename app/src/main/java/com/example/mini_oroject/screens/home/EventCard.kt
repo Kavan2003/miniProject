@@ -103,7 +103,7 @@ fun EventReelCard(
             }
 
 
-// Title, Time and Description section
+            // Title, Time and Description section
             Text(
                 text = event.itemname,
                 maxLines = 2,
@@ -112,20 +112,15 @@ fun EventReelCard(
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface
             )
-            Log.d("timedate", "EventReelCard: ${event.startTime} - ${event.endTime}")
+
+
+          
             Text(
                 text = "${event.startTime}",
                 fontSize = 16.sp,
                 color = Color.Gray
             )
-//            Text(
-//                text = ,
-//                maxLines = 2,
-//                overflow = TextOverflow.Ellipsis,
-//                fontSize = 14.sp,
-//                color = MaterialTheme.colorScheme.onSurface
-//
-//            )
+
             MarkdownText(
                 markdown = event.description.substring(0, event.description.length / 5),
                 modifier = Modifier.fillMaxWidth(),
@@ -135,7 +130,7 @@ fun EventReelCard(
 
             )
 
-// Information bar with price and optional button
+            // Information bar with price and optional button
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -154,4 +149,5 @@ fun EventReelCard(
             }
         }
     }
+
 }

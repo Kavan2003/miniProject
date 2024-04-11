@@ -2,8 +2,12 @@ package com.example.mini_oroject.data_model
 
 
 class Event {
+    var priceshipping: String
+    var returnpolicy: String
+    var shippingpolicy: String
+    var condition: String
     var id: String
-    var categories: List<String>
+    var categories: String
     var description: String
     var imageUrl: String
     var initialPrice: String
@@ -13,7 +17,12 @@ class Event {
 
     constructor(
         id: String,
-        categories: List<String>,
+        priceshipping: String,
+        returnpolicy: String,
+        shippingpolicy: String,
+        condition: String,
+
+        categories: String,
         description: String,
         imageUrl: List<String>,
         initialPrice: String,
@@ -22,6 +31,10 @@ class Event {
         endTime: String
     ) {
         this.id = id
+        this.priceshipping = priceshipping
+        this.returnpolicy = returnpolicy
+        this.shippingpolicy = shippingpolicy
+        this.condition = condition
         this.categories = categories
         this.description = description
         this.imageUrl = imageUrl[0]
@@ -34,7 +47,12 @@ class Event {
     //Add this
     constructor() {
         this.id = ""
-        this.categories = listOf()
+        this.priceshipping = ""
+        this.returnpolicy = ""
+        this.shippingpolicy = ""
+        this.condition = ""
+        
+        this.categories = ""
         this.description = ""
         this.imageUrl = ""
         this.initialPrice = "0"

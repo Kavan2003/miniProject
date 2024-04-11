@@ -42,6 +42,7 @@ fun Bottombar(navController: NavHostController) {
             Modifier
                 .weight(1.0F)
                 .clickable {
+                    navController.navigate(Routes.notification.rout)
 
                 })
         Spacer(modifier = Modifier.weight(1.0F))
