@@ -7,8 +7,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -24,14 +22,8 @@ fun ListEventCard(
     modifier: Modifier = Modifier,
     events: List<Event>,
     navController: NavHostController,
+    isAdmin: Boolean
 ) {
-    val offsetX = remember { mutableStateOf(0f) }
-    val maxOffsetX = 200f // Threshold for swipe distance
-
-    val currentIndex = remember { mutableStateOf(0) } // Track current item index
-
-
-
     LazyColumn(
         modifier = modifier
             .background(MaterialTheme.colorScheme.secondary)
@@ -42,13 +34,14 @@ fun ListEventCard(
                 navController = navController,
                 event = event,
                 modifier = Modifier,
+                isAdmin = isAdmin,
                 onEventClick = {
 
                     var p = PostData(
                         id = event.id,
                         title = event.itemname,
                         selectedStartDate = event.startTime,
-                        selectedEndDate = "",
+                        selectedEndDate = "$isAdmin",
                         price = event.initialPrice.toString(),
                         productDescription = URLEncoder.encode(
                             event.description,

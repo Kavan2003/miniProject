@@ -1,4 +1,5 @@
-package com.example.mini_oroject.screens.notification
+package com.example.mini_oroject.screens.sampledata
+
 
 import android.util.Log
 import androidx.compose.foundation.background
@@ -50,7 +51,7 @@ data class Auction(
 
 
 @Composable
-fun AuctionItem(auction: Auction, onStopAuction: () -> Unit) {
+fun AdminItem(auction: Auction, onStopAuction: () -> Unit) {
     Card(
         modifier = Modifier
             .padding(8.dp)
@@ -63,7 +64,6 @@ fun AuctionItem(auction: Auction, onStopAuction: () -> Unit) {
             disabledContainerColor = MaterialTheme.colorScheme.onSurface
 
         ),
-        //elevation = 4.dp
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -88,7 +88,7 @@ fun AuctionItem(auction: Auction, onStopAuction: () -> Unit) {
             }
             Spacer(modifier = Modifier.width(8.dp))
             Button(onClick = onStopAuction) {
-                Text("Stop Auction")
+                Text("View Auction")
             }
         }
 
@@ -99,7 +99,7 @@ fun AuctionItem(auction: Auction, onStopAuction: () -> Unit) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NotificationScreen(
+fun AdminScreen(
 
     navController: NavHostController,
     auth: FirebaseAuth
@@ -107,9 +107,6 @@ fun NotificationScreen(
     val currentUser = auth.currentUser!!.uid
     val auctionList = remember { mutableStateListOf<Auction>() }
 
-    // Log.e("TAG", "NotificationScreen: start")
-
-    // Access your FirebaseFirestore instance
     val db = FirebaseFirestore.getInstance()
     var currentPrice by remember { mutableStateOf<String?>("currentPrice") }
 
@@ -122,24 +119,23 @@ fun NotificationScreen(
     //  Log.e("TAG", "NotificationScreen: start")
 
 
-    docRef.whereEqualTo("created_by", currentUser)
+    docRef.whereEqualTo("created_by", currentUser).whereEqualTo("publish", false)
         .get()
         .addOnSuccessListener { documents ->
             auctionList.clear()
             for (document in documents) {
-                //        Log.i("loadActiveAuctions", "loadActiveAuctions: ${document.data["itemname"]} ")
                 val data = document.data
                 id = document.id
+
                 val itemName = data["itemname"] as String
                 currentPrice = (data["initialPrice"] as String)
-                val buyerName = "" // Buyer name is initially empty
                 val isActive = data["isActive"] as Boolean
                 Log.d("itemcheck", "$itemName, $currentPrice, $isActive")
 
 
                 auctionList.add(
                     Auction(
-                        id, itemName, currentPrice!!, buyerName, isActive
+                        id, itemName, currentPrice!!, "", isActive
                     )
                 )
             }
@@ -199,7 +195,7 @@ fun NotificationScreen(
 
 
                         auctionList.forEach { auction ->
-                            AuctionItem(auction = auction, onStopAuction = {
+                            AdminItem(auction = auction, onStopAuction = {
                                 //navigation to pEventDetails()
                                 Log.e("TAG", "NotificationScreen: onStopAuction")
                                 val data = auction.id

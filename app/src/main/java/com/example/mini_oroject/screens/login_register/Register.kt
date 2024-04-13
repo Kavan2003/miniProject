@@ -269,7 +269,8 @@ fun Register(navController: NavHostController, auth: FirebaseAuth) {
                                         "Name" to Name,
                                         "Email" to email,
                                         "Phone" to phone,
-                                        "Address" to address
+                                        "Address" to address,
+                                        "isAdmin" to false
                                     )
                                     if (user != null)
                                         db.collection("users_data").document(user.uid)

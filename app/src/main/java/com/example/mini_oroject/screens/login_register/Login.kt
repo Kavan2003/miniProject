@@ -41,12 +41,15 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.mini_oroject.routes.Routes
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 
 @Composable
 fun Login(navController: NavHostController, auth: FirebaseAuth) {
 
     val context = LocalContext.current
+    var isAdmin by remember { mutableStateOf(false) }
+    val db = FirebaseFirestore.getInstance()
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var isLoading by remember { mutableStateOf(false) }
@@ -163,10 +166,35 @@ fun Login(navController: NavHostController, auth: FirebaseAuth) {
                         .addOnCompleteListener {
                             isLoading = false
                             if (it.isSuccessful) {
+
                                 Log.d("TAG", "Login Done:" + auth.currentUser?.email)
                                 Toast.makeText(context, "Login Done", Toast.LENGTH_SHORT).show()
 
-                                navController.navigate(Routes.Home.rout)
+                                val docRef = db.collection("users_data")
+                                    .document(auth.currentUser?.uid.toString())
+                                docRef.get().addOnSuccessListener { document ->
+                                    if (document.exists()) {
+                                        isAdmin = document.getBoolean("isAdmin") ?: false
+                                        Log.w(
+                                            "checkIfUserIsAdmin",
+                                            "User document ${document.getBoolean("isAdmin") ?: false} not found for ${isAdmin}"
+                                        )
+
+                                        navController.navigate(Routes.Home.rout + "/$isAdmin")
+
+                                        // Handle case where user document doesn't exist
+                                        Log.w(
+                                            "checkIfUserIsAdmin",
+                                            "User document not found for ${auth.currentUser?.email}"
+                                        )
+                                    }
+                                }.addOnFailureListener { exception ->
+                                    Log.w(
+                                        "checkIfUserIsAdmin",
+                                        "Error fetching user data: $exception"
+                                    )
+                                }
+
 
                             } else {
                                 Log.d("TAG", "Login Failed:" + it.exception?.message)

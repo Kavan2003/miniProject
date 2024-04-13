@@ -164,7 +164,7 @@ fun ImageUpload(navController: NavHostController, auth: FirebaseAuth, data: Post
         "condition" to selectedCondition.description,
         "returnpolicy" to selectedReturn.description,
         "category" to auctionCategory.description,
-        "test" to "test"
+        "publish" to false
 
     )
 

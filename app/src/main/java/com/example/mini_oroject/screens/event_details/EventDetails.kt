@@ -46,13 +46,32 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.snapshots
 import com.meetup.twain.MarkdownText
+
+fun updatePublishStatus(documentId: String) {
+    val db = FirebaseFirestore.getInstance()
+    Log.w("TAG", "updatePublishStatus: ${documentId}")
+
+    val docRef = db.collection("auction_item").document(documentId)
+    Log.w("TAG", "updatePublishStatus: ${docRef.snapshots()}")
+    docRef.update("publish", true)
+        .addOnSuccessListener {
+            // Update successful
+            Log.d("PublishUpdate", "Document published successfully!")
+        }
+        .addOnFailureListener { e ->
+            Log.w("PublishUpdate", "Error publishing document: $e")
+        }
+}
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalGlideComposeApi::class)
 @Composable
 fun EventDetails(data: PostData, auth: FirebaseAuth) {
 
     val firestore = FirebaseFirestore.getInstance()
+    val isAdmin = data.selectedEndDate == "true"
+    val id = data.id
     //   var postData by remember { mutableStateOf<PostData?>(null) }
     var imageUrls by remember { mutableStateOf<List<String>?>(null) }
     var currentPrice by remember { mutableStateOf<String?>("currentPrice") }
@@ -284,36 +303,49 @@ fun EventDetails(data: PostData, auth: FirebaseAuth) {
         }
 
         Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = {
-            // Place bid
-            val priceData = HashMap<String, Any?>()
-            priceData["id"] = data.id
-            priceData["price"] =
-                nextPrice?.toDouble()  // Assuming price is a String, convert to Double
+        if (!(isAdmin))
+            Button(onClick = {
+                // Place bid
+                val priceData = HashMap<String, Any?>()
+                priceData["id"] = data.id
+                priceData["price"] =
+                    nextPrice?.toDouble()  // Assuming price is a String, convert to Double
 
-            // Write data to Realtime Database
-            realtimeDatabase.setValue(priceData)
-                .addOnSuccessListener {
-                    Log.d("RealtimeDB", "Data saved for document: ${data.id}")
-                    val dataToSave = hashMapOf(
-                        "pay_by" to auth.currentUser?.uid,
-                        "pay_amt" to nextPrice,
-                        "product_reference" to data.id
-                    )
-                    firestore.collection("user_payment").add(dataToSave)
-                        .addOnSuccessListener { documentReference ->
-                            Log.d("TAG", "Document written with ID: ${documentReference.path}")
-                        }
-                        .addOnFailureListener { e ->
-                            Log.w("TAG", "Error adding document", e)
-                        }
-                }
-                .addOnFailureListener { e ->
-                    Log.w("RealtimeDB", "Error saving data to Realtime Database", e)
-                }
+                // Write data to Realtime Database
+                realtimeDatabase.setValue(priceData)
+                    .addOnSuccessListener {
+                        Log.d("RealtimeDB", "Data saved for document: ${data.id}")
+                        val dataToSave = hashMapOf(
+                            "pay_by" to auth.currentUser?.uid,
+                            "pay_amt" to nextPrice,
+                            "product_reference" to data.id
+                        )
+                        firestore.collection("user_payment").add(dataToSave)
+                            .addOnSuccessListener { documentReference ->
+                                Log.d("TAG", "Document written with ID: ${documentReference.path}")
+                            }
+                            .addOnFailureListener { e ->
+                                Log.w("TAG", "Error adding document", e)
+                            }
+                    }
+                    .addOnFailureListener { e ->
+                        Log.w("RealtimeDB", "Error saving data to Realtime Database", e)
+                    }
 
-        }) {
-            Text(text = "Place Bid : $nextPrice")
-        }
+            }) {
+                Text(text = "Place Bid : $nextPrice")
+            }
+        else
+            Button(
+                onClick = {
+                    Log.w("TAG", "updatePublishStatus: ${id}")
+
+                    updatePublishStatus(id)
+                    
+                },
+                content = {
+                    Text("Approve")
+                }
+            )
     }
 }

@@ -54,11 +54,15 @@ fun listenForPriceChanges(itemId: String) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Home(navController: NavHostController, auth: FirebaseAuth) {
+fun Home(navController: NavHostController, auth: FirebaseAuth, data: String) {
+    var isAdmin = data == "true"
+    Log.i("$isAdmin", "Home: $data")
     var tabIndex = remember { mutableIntStateOf(0) }
     var events = remember { mutableStateListOf<Event>() }
 
-    FirebaseFirestore.getInstance().collection("auction_item")
+
+    FirebaseFirestore.getInstance().collection("auction_item").whereEqualTo("isActive", true)
+        .whereEqualTo("publish", !(isAdmin))
         .get()
         .addOnSuccessListener { documents ->
             events.clear()
@@ -159,7 +163,10 @@ fun Home(navController: NavHostController, auth: FirebaseAuth) {
             )
         },
         bottomBar = {
-            Bottombar(navController)
+            if (isAdmin) {
+
+            } else
+                Bottombar(navController)
         },
 
         content = { innerPadding ->
@@ -170,7 +177,8 @@ fun Home(navController: NavHostController, auth: FirebaseAuth) {
                         .background(Color.White),
                     events,
 
-                    navController
+                    navController,
+                    isAdmin
                 )
             else if (tabIndex.intValue == 1)
                 Column(

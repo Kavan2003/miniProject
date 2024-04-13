@@ -1,6 +1,5 @@
 package com.example.mini_oroject.screens.home
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -45,6 +44,7 @@ fun EventReelCard(
     event: Event,
     onEventClick: () -> Unit,
     navController: NavHostController? = null, // for optional navigation
+    isAdmin: Boolean,
     modifier: Modifier = Modifier.fillMaxHeight()
 ) {
 
@@ -114,7 +114,7 @@ fun EventReelCard(
             )
 
 
-          
+
             Text(
                 text = "${event.startTime}",
                 fontSize = 16.sp,
@@ -138,13 +138,22 @@ fun EventReelCard(
             ) {
 
                 if (navController != null) {
-                    OutlinedButton(
-                        onClick = onEventClick,
-                        colors = buttonColors(contentColor = MaterialTheme.colorScheme.inverseSurface),
-                        modifier = Modifier.padding(start = 8.dp)
-                    ) {
-                        Text(text = "Place Bid")
-                    }
+                    if (!(isAdmin))
+                        OutlinedButton(
+                            onClick = onEventClick,
+                            colors = buttonColors(contentColor = MaterialTheme.colorScheme.inverseSurface),
+                            modifier = Modifier.padding(start = 8.dp)
+                        ) {
+                            Text(text = "Place Bid")
+                        }
+                    else
+                        OutlinedButton(
+                            onClick = onEventClick,
+                            colors = buttonColors(contentColor = MaterialTheme.colorScheme.inverseSurface),
+                            modifier = Modifier.padding(start = 8.dp)
+                        ) {
+                            Text(text = "Approve")
+                        }
                 }
             }
         }

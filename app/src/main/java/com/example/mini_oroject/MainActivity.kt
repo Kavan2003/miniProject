@@ -28,7 +28,9 @@ import com.example.mini_oroject.screens.login_register.Login
 import com.example.mini_oroject.screens.login_register.LoginChoose
 import com.example.mini_oroject.screens.login_register.Register
 import com.example.mini_oroject.screens.notification.NotificationScreen
+import com.example.mini_oroject.screens.notification.pEventDetails
 import com.example.mini_oroject.screens.profile.Profile
+import com.example.mini_oroject.screens.sampledata.AdminScreen
 import com.example.mini_oroject.ui.theme.Mini_orojectTheme
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -78,6 +80,10 @@ class MainActivity : ComponentActivity() {
                         composable(Routes.bid_his.rout) {
                             bidScreen(navController = navController, auth = auth)
                         }
+                        composable(Routes.admin.rout) {
+
+                            AdminScreen(navController = navController, auth = auth)
+                        }
                         composable(Routes.bid_his_des.rout + "/{data}") { backStackEntry ->
                             val data = backStackEntry.arguments?.getString("data")
                             if (data != null) {
@@ -91,8 +97,12 @@ class MainActivity : ComponentActivity() {
                         composable(Routes.Register.rout) {
                             Register(navController = navController, auth = auth)
                         }
-                        composable(Routes.Home.rout) {
-                            Home(navController = navController, auth = auth)
+                        composable(Routes.Home.rout + "/{data}") { backStackEntry ->
+                            val data = backStackEntry.arguments?.getString("data")
+
+                            if (data != null) {
+                                Home(navController = navController, auth = auth, data = data)
+                            }
                         }
                         composable(Routes.LoginChoose.rout) {
                             MaterialTheme(colorScheme = MaterialTheme.colorScheme) { // Apply theme here

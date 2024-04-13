@@ -6,6 +6,7 @@ sealed class Routes(val rout: String) {
 
     object bid_his : Routes("bid_history")
     object bid_his_des : Routes("bid_history_des")
+    object admin : Routes("admin")
     object Register : Routes("register")
     object LoginChoose : Routes("loginChoose")
     object Profile : Routes("profile")

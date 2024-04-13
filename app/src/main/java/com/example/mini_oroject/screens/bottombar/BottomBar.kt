@@ -32,7 +32,7 @@ fun Bottombar(navController: NavHostController) {
             Modifier
                 .weight(1.0F)
                 .clickable {
-                    navController.navigate(Routes.Home.rout)
+                    navController.navigate(Routes.Home.rout + "/{false}")
 
 
                 })
